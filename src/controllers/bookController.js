@@ -1,4 +1,5 @@
 import book from "../models/books.js";
+import { author } from "../models/authors.js";
 
 class BookController {
 
@@ -12,11 +13,15 @@ class BookController {
   }
 
   static async createBook(req, res) {
+    const newBook = req.body;
+
     try {
-      const newBook = await book.create(req.body);
+      const foundAuthor = await author.findById(newBook.author);
+      const bookData = { ...newBook, author: { ...foundAuthor._doc }};
+      const createdBook = await book.create(bookData);
       res.status(201).json({
         message: "Created successfully",
-        book: newBook,
+        book: createdBook,
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -73,6 +78,22 @@ class BookController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  static async getBooksByEditorial(req, res) {
+    try {
+      const editorial = req.query.editorial;
+      const books = await book.find({ editorial: editorial });
+      if (books.length > 0) {
+        res.status(200).json(books);
+      } else {
+        res.status(404).json({ message: "Books not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+
 }
 
 export default BookController;

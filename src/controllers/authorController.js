@@ -1,7 +1,6 @@
-import author from "../models/authors.js";
+import { author } from "../models/authors.js";
 
 class AuthorController {
-
   static async getAuthors(req, res) {
     try {
       const authors = await author.find({});
