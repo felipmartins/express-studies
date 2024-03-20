@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import authorSchema from "./authors.js";
 
 const bookSchema = new mongoose.Schema({
     id: {

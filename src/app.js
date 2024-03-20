@@ -1,7 +1,7 @@
 import express from "express";
 import databaseConnection from "./config/db.js";
 import book from "./models/books.js";
-
+import routes from "./routes/index.js";
 
 const connection = await databaseConnection();
 
@@ -14,7 +14,7 @@ connection.once("open", () => {
 });
 
 const app = express();
-app.use(express.json())
+routes(app);
 
 // const books = [{
 //     "id": 1,
@@ -31,42 +31,29 @@ app.use(express.json())
 //     });
 // };
 
-async function findByName(name) {
-    return await book.find({title: name});
-};
+// async function findByName(name) {
+//     return await book.find({title: name});
+// };
 
-app.get("/", (req, res) => {
-    res.status(200).send("Curso de Node.js");
-});
+// app.get("/", (req, res) => {
+//     res.status(200).send("Curso de Node.js");
+// });
 
-app.get("/books", async (req, res) => {
-    const books = await book.find({});
-    res.status(200).json(books);
-});
+// app.get("/books/:id", async (req, res) => {
+//     const book = await book.find({id: req.params.id});
+//     res.status(200).json(book);
+// });
 
-app.get("/books/:id", async (req, res) => {
-    const book = await book.find({id: req.params.id});
-    res.status(200).json(book);
-});
+// app.put("/books/:id", (req, res) => {
+//     const index = searchBook(req.params.id);
+//     books[index].title = req.body.title;
+//     res.status(200).send(books[index])
+// });
 
-app.post("/books", (req, res) => {
-    book.create(req.body).then((book) => {
-        res.status(201).json(book);
-    }).catch((err) => {
-        res.status(500).send("Error: " + err);
-    });
-});
-
-app.put("/books/:id", (req, res) => {
-    const index = searchBook(req.params.id);
-    books[index].title = req.body.title;
-    res.status(200).send(books[index])
-});
-
-app.delete("/books/:id", (req, res) => {
-    const index = searchBook(req.params.id);
-    books.splice(index, 1);
-    res.status(204).send("Deleted");
-});
+// app.delete("/books/:id", (req, res) => {
+//     const index = searchBook(req.params.id);
+//     books.splice(index, 1);
+//     res.status(204).send("Deleted");
+// });
 
 export default app;
