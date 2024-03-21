@@ -1,6 +1,5 @@
 import express from "express";
 import authorController from "../controllers/authorController.js";
-import { author } from "../models/authors.js";
 
 const router = express.Router();
 
